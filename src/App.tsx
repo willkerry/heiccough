@@ -1,6 +1,22 @@
 import heic2any from "heic2any";
 import { useState, useRef, useCallback } from "react";
 
+const isUKorIreland = () => {
+  // Check if user is from UK or Ireland based on timezone or locale
+  const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const userLocale = navigator.language || (navigator as any).userLanguage;
+
+  // UK/Ireland timezones
+  const britishIslesTimezones = ["Europe/London", "Europe/Dublin"];
+  // UK/Ireland locales
+  const britishIslesLocales = ["en-GB", "en-IE", "ga-IE"];
+
+  return (
+    britishIslesTimezones.includes(userTimezone) ||
+    britishIslesLocales.some((locale) => userLocale.startsWith(locale))
+  );
+};
+
 function App() {
   const [isDragging, setIsDragging] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
@@ -98,11 +114,13 @@ function App() {
     setConverting(false);
   };
 
+  const appName = isUKorIreland() ? "Heiccough" : "Heiccup";
+
   return (
     <section className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="max-w-md w-full mx-auto">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-red-700">Heiccough</h1>
+          <h1 className="text-2xl font-bold text-red-700">{appName}</h1>
           <p className="text-sm text-gray-500">
             Convert HEIC images to JPEGs. Drop files or tap to select.
           </p>
