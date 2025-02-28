@@ -60,7 +60,7 @@ function App() {
 
     for (const file of filesToConvert) {
       try {
-        setProgress((prev) => ({ ...prev, [file.name]: "Converting..." }));
+        setProgress((prev) => ({ ...prev, [file.name]: "Converting\u2026" }));
 
         const jpegBlobOrBlobs = await heic2any({
           blob: file,
@@ -119,7 +119,7 @@ function App() {
           onClick={handleFileInputClick}
         >
           <p className="text-sm font-medium">
-            {converting ? "Converting..." : "Drop HEIC images here"}
+            {converting ? "Converting\u2026" : "Drop HEIC images here"}
           </p>
           <p className="text-xs text-gray-500">
             Files will be converted to JPEG and downloaded automatically
