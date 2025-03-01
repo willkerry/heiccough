@@ -1,5 +1,6 @@
 import heic2any from "heic2any";
 import { useState, useRef, useCallback } from "react";
+import { checkFilesForNonHeic } from "./lib/checkFilesForNonHeic";
 
 const isUKorIreland = () => {
   // Check if user is from UK or Ireland based on timezone or locale
@@ -43,17 +44,7 @@ function App() {
     setIsDragging(false);
 
     const droppedFiles = Array.from(e.dataTransfer.files);
-
-    const heicFiles = droppedFiles.filter(
-      (file) =>
-        file.name.toLowerCase().endsWith(".heic") || file.type === "image/heic"
-    );
-
-    if (heicFiles.length < droppedFiles.length) {
-      alert(
-        "One or more of the files you dropped are not HEIC files. We'll ignore those'."
-      );
-    }
+    const heicFiles = checkFilesForNonHeic(droppedFiles);
 
     if (heicFiles.length > 0) {
       setFiles((prev) => [...prev, ...heicFiles]);
@@ -66,7 +57,7 @@ function App() {
   };
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
+    const files = checkFilesForNonHeic(Array.from(e.target.files || []));
     setFiles((prev) => [...prev, ...files]);
     convertFiles(files);
   };
